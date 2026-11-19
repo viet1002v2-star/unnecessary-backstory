@@ -170,7 +170,8 @@
 .bs-sheet-bar h2 { margin: 0; font-weight: 400; color: var(--ink-soft); overflow-wrap: anywhere; }
 .bs-sheet-bar h2:focus { outline: none; }
 .bs-sheet-bar .btn { color: var(--ink); }
-.bs-sheet-body { padding: var(--s4); overflow: auto; flex: 1; min-height: 0; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+.bs-sheet-body { padding: var(--s4); overflow: auto; flex: 1 1 auto; min-height: 0;   /* basis auto: Safari collapses a basis-0 child of a content-sized column */
+  overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
 .bs-sheet-nav { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: var(--s3); padding: var(--s3) var(--s4) calc(var(--s3) + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--rule); }
 .bs-sheet-nav .btn { color: var(--ink); }
 .bs-sheet-nav .btn.primary { color: var(--paper); }
@@ -197,7 +198,7 @@
 
 /* ---------- file viewer ---------- */
 .bs-viewer[open] { display: flex; flex-direction: column; }
-.bs-viewer-body { padding: var(--s4); overflow: auto; flex: 1; min-height: 0; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+.bs-viewer-body { padding: var(--s4); overflow: auto; flex: 1 1 auto; min-height: 0; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
 .bs-viewer-body img { margin: 0 auto; max-height: 70vh; max-height: 70dvh; width: auto; }
 .bs-viewer-body iframe { width: 100%; height: 70vh; height: 70dvh; border: 0; }
 /* the page behind an open sheet or viewer does not scroll */
