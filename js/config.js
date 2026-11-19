@@ -8,5 +8,5 @@
    When the site itself is served over http(s) (for example on GitHub Pages),
    its own address is used automatically and this setting is not needed. */
 window.UB_CONFIG = {
-  SITE_URL: ''
+  SITE_URL: 'https://viet1002v2-star.github.io/unnecessary-backstory/'
 };

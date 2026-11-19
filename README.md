@@ -19,10 +19,11 @@ Status of the build:
 Quick tour: Home → Start a backstory → "Add example thoughts" → Curate (tick a few) → Wrap It Up → Preview.
 
 ## Sharing by QR code
-A phone cannot open files on your computer, so a QR code only makes sense once the site is online.
-Publish this folder (for example on GitHub Pages) and either open the online copy, or put its
-address in `js/config.js` (`SITE_URL`). Until then Wrap It Up makes a link that opens on this
-computer only, says so, and shows no QR code.
+A phone cannot open files on your computer, so share links and QR codes point to the online copy
+of this site: https://viet1002v2-star.github.io/unnecessary-backstory/HomePage.html
+That address is set in `js/config.js` (`SITE_URL`), so Wrap It Up makes a working link and QR code
+even when this folder is opened from disk. Share links carry words only; pictures and files a giver
+uploads stay on their own computer, and the page says so.
 
 ## Responsive strategy
 The Backstory is mobile-first: it is opened by scanning a code on a physical gift.

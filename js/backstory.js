@@ -362,6 +362,10 @@
       start = null;
       li.classList.remove('is-dragging');
     };
+    /* Safari on iPhone still scrolls or zooms unless the touch itself is cancelled */
+    var stop = function (e) { if (e.cancelable) e.preventDefault(); };
+    handle.addEventListener('touchstart', stop, { passive: false });
+    handle.addEventListener('touchmove', stop, { passive: false });
     handle.addEventListener('pointerup', end);
     handle.addEventListener('pointercancel', end);
     handle.addEventListener('lostpointercapture', end);
@@ -509,8 +513,11 @@
     } else openSheet();
   }
 
+  function modalOpen(on) { document.documentElement.classList.toggle('bs-modal-open', on || els.sheet.open || els.viewer.open); }
+
   function openSheet() {
     renderSheet();
+    modalOpen(true);
     if (typeof els.sheet.showModal === 'function') els.sheet.showModal(); else els.sheet.setAttribute('open', '');
     els.sheetTitle.focus();
   }
@@ -537,6 +544,7 @@
     els.viewerTitle.textContent = b.name;
     els.viewerBody.textContent = '';
     if (typeof els.viewer.showModal === 'function') els.viewer.showModal(); else els.viewer.setAttribute('open', '');
+    modalOpen(true);
     var note = function (text) { var p = document.createElement('p'); p.textContent = text; els.viewerBody.appendChild(p); };
     if (typeof b.inline === 'string') {
       var pre = document.createElement('pre'); pre.textContent = b.inline; els.viewerBody.appendChild(pre); return;
@@ -561,9 +569,18 @@
       }
     }).catch(function () { els.viewerBody.textContent = ''; note('This browser could not open its file storage, so the file cannot be shown.'); });
   }
+  els.sheet.addEventListener('close', function () { modalOpen(false); });
   els.viewer.addEventListener('close', function () {
+    modalOpen(false);
     els.viewerBody.textContent = '';
     if (viewerUrl) { URL.revokeObjectURL(viewerUrl); viewerUrl = null; }
+  });
+
+  /* Older phone browsers without <dialog>: give the two dialogs open/close so they still work. */
+  [els.sheet, els.viewer].forEach(function (d) {
+    if (typeof d.close === 'function') return;
+    Object.defineProperty(d, 'open', { get: function () { return d.hasAttribute('open'); } });
+    d.close = function () { if (!d.hasAttribute('open')) return; d.removeAttribute('open'); d.dispatchEvent(new Event('close')); };
   });
 
   /* ---------- wiring ---------- */
