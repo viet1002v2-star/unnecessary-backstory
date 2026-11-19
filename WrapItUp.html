@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Wrap It Up · The Unnecessary Backstory</title>
+  <link rel="stylesheet" href="css/vendor/bootstrap-grid.min.css">
+  <link rel="stylesheet" href="css/vendor/bootstrap-utilities.min.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body class="app">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="os-bar">
+    <a class="os-brand" href="HomePage.html">The Unnecessary Backstory</a>
+    <nav aria-label="Steps">
+      <ol class="os-steps">
+        <li><a href="MyThoughts.html">My Thoughts</a></li>
+        <li><a href="Curate.html">Curate</a></li>
+        <li><a href="WrapItUp.html" aria-current="page">Wrap It Up</a></li>
+      </ol>
+    </nav>
+    <span class="os-save mono" id="autosave"></span>
+  </header>
+
+  <main id="main" class="page">
+    <div class="page-head">
+      <h1>Wrap It Up</h1>
+      <p>Add a last line, check what is included, and preview it the way they will see it. Then make a link or QR code to put with the gift.</p>
+    </div>
+
+    <div class="empty" id="nothing" hidden>
+      <p>Nothing has been chosen for the gift yet.</p>
+      <a class="btn primary" href="Curate.html">Choose thoughts in Curate</a>
+    </div>
+
+    <div class="row g-4 align-items-start" id="content">
+      <div class="col-lg-7 d-grid gap-4">
+        <section class="win" aria-labelledby="ending-title">
+          <div class="win-bar"><h2 id="ending-title">for_you.txt</h2><span>the last thing they read</span></div>
+          <div class="win-body d-grid gap-3">
+            <div class="field">
+              <label for="final">Final message</label>
+              <textarea class="textarea hand" id="final" rows="2" maxlength="400" placeholder="Anyway. I hope you like it." aria-describedby="final-hint"></textarea>
+              <span class="hint" id="final-hint">Shown on its own after all the thoughts, when everything else goes quiet. Keep it short.</span>
+            </div>
+            <div class="row g-3">
+              <div class="col-sm-6 field">
+                <label for="from">Signed as</label>
+                <input class="input" id="from" maxlength="40" placeholder="Sam" autocomplete="given-name" aria-describedby="from-hint">
+                <span class="hint" id="from-hint">Shown as "Sam's brain".</span>
+              </div>
+              <div class="col-sm-6 field">
+                <label for="gift">The gift (optional)</label>
+                <input class="input" id="gift" maxlength="40" placeholder="flowers" aria-describedby="gift-hint">
+                <span class="hint" id="gift-hint">Shown as "came with the flowers".</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="win quiet" aria-labelledby="inc-title">
+          <div class="win-bar"><h2 id="inc-title">what's going in</h2><a href="Curate.html" class="mono" style="color: var(--ink)">change in Curate</a></div>
+          <div class="win-body">
+            <ol class="wrap-list" id="included"></ol>
+          </div>
+        </section>
+      </div>
+
+      <div class="col-lg-5 d-grid gap-4">
+        <section class="win" aria-labelledby="preview-title">
+          <div class="win-bar"><h2 id="preview-title">preview</h2><span>only you see this</span></div>
+          <div class="win-body d-grid gap-3">
+            <p class="m-0">See the story exactly as the person opening the gift will, pictures and files included, on this computer.</p>
+            <div><a class="btn primary" id="preview" href="Backstory.html?source=preview" target="_blank" rel="noopener">Preview the backstory</a></div>
+            <p class="hint mono m-0">Opens in a new tab. For the phone view, make the window narrow.</p>
+          </div>
+        </section>
+
+        <section class="win" aria-labelledby="share-title">
+          <div class="win-bar"><h2 id="share-title">share</h2><span id="share-status"></span></div>
+          <div class="win-body d-grid gap-3">
+            <div class="notice warn" id="media-warning" hidden>
+              <p id="media-warning-text"></p>
+              <p>A link or QR code can only carry words, so the person opening the gift on their own phone will see a short note where each one was, with its description. They will see everything if you show them the story on this computer.</p>
+              <label class="check mt-2"><input type="checkbox" id="words-only"><span>Share the words only. I understand pictures and files stay here.</span></label>
+            </div>
+
+            <div class="notice" id="no-address" hidden>
+              <p>This copy of the site is running from files on your computer, so a link to it would only open on this computer. A phone that scans a QR code cannot reach it.</p>
+              <p>To share with a QR code, publish the site (for example on GitHub Pages) and put its address in <span class="mono">js/config.js</span>. Until then, use the preview to show the story on this computer.</p>
+            </div>
+
+            <div><button type="button" class="btn primary" id="make">Create link and QR code</button></div>
+            <p class="error-text" id="make-error" hidden></p>
+
+            <div class="export" id="exporting" hidden>
+              <span class="mono" id="export-label">Exporting brain…</span>
+              <div class="progress" aria-hidden="true"><span id="bar"></span></div>
+            </div>
+
+            <div class="share-out" id="out" hidden>
+              <div class="field">
+                <label for="link">Link</label>
+                <div class="link-row">
+                  <input class="input" id="link" readonly>
+                  <button type="button" class="btn" id="copy">Copy</button>
+                </div>
+              </div>
+              <figure class="m-0 d-grid gap-2" id="qr-wrap">
+                <div class="qr" id="qr"></div>
+                <figcaption class="hint mono" id="qr-caption">Contains words only. Scan it with your own phone before you wrap the gift.</figcaption>
+              </figure>
+              <a class="btn" id="open-link" href="#" target="_blank" rel="noopener">Open the link</a>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+    <p class="visually-hidden" id="announce" aria-live="polite"></p>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/vendor/qrcode.js"></script>
+  <script src="js/files.js"></script>
+  <script src="js/story.js"></script>
+  <script src="js/draft.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/wrap.js"></script>
+</body>
+</html>

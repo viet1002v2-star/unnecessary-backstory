@@ -1,0 +1,52 @@
+DRAWINGS NEEDED — drop finished files into this folder with exactly these names.
+The page picks them up automatically. Until then:
+  - the app icon is simply left out (no stand-in decoration);
+  - the demo flowers show a dashed box with its file name and description.
+
+Rules for every drawing
+- One ink colour, line work only, no filled background.
+- PNG with a transparent background (or scan on white and remove the white).
+- Draw or scan at about 2x the size listed so lines stay sharp on phones.
+- On the dark phone lock screen the app icon is turned white automatically.
+
+-----------------------------------------------------------------
+1. app-icon.png
+   Purpose : the icon of the fictional "Sam's brain" app, shown next to the app name
+             in the status bar (phone) and menu bar (desktop).
+   Idea    : a tiny brain, a scribble, a face; anything that still reads at 18px.
+   Size    : 256 x 256 px, square, transparent PNG
+   Appears : Backstory page, top bar
+
+2. demo-flowers.png   [DONE 16 Nov]
+   Purpose : the drawing inside thought 5 of the demo story ("Drew the flowers so I'd
+             remember which ones. They look like broccoli."). Shows what a thought with a drawing looks like.
+   Idea    : a clump of flowers, drawn quickly. Looking a bit like broccoli is the joke.
+   Size    : 1200 x 900 px (4:3), transparent PNG
+   Appears : Backstory demo, thought 5 (phone sheet and desktop window); My Thoughts example thoughts
+
+3. demo-sheet.png   [DONE 16 Nov: the whole list is handwritten by the author; the page shows it as drawn, the typed positions below are no longer used]
+   Purpose : the pen layer on top of the handwritten page in the demo story
+             ("Made a list. It did not help."). The words are typed in by the site;
+             your drawing adds the marks people make on a real list.
+   Draw    : two circles around "1. flowers", a line crossing out "4. just ask her",
+             and anything else you like (an arrow, a doodle in the margin).
+   Where the words sit (from the top-left corner of the page):
+             "gift ideas (final)"        8% from left, 7% from top
+             "1. flowers"               12% from left, 25% from top
+             "2. a book? ..."           12% from left, 39% from top
+             "3. nothing (mature)"      12% from left, 54% from top
+             "4. just ask her"          12% from left, 68% from top
+             "(final final)"            47% from left, 85% from top
+             Tip: open the demo, take a screenshot of the page, draw on top of it,
+             then delete the screenshot layer so only your marks remain.
+   Size    : 1080 x 1440 px (3:4, same shape as the page), transparent PNG
+   Appears : Backstory demo, thought 4; My Thoughts example thoughts
+
+4. demo-cat.jpg   [DONE 16 Nov, photo by the author]
+   Purpose : the photo in the #unrelated thought ("Saw a cat staring at a closed gate
+             for ten minutes. Same, honestly.").
+   Size    : 800 x 600 px (4:3), JPG
+-----------------------------------------------------------------
+The description text for each drawing lives in js/story.js (field "alt").
+If you change what you draw, update that sentence too: screen readers read it,
+and it is what a share link shows when a picture cannot travel.

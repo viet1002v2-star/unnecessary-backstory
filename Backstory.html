@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#17161C">
+  <title>The Backstory · The Unnecessary Backstory</title>
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/backstory.css">
+</head>
+<body class="bs-body">
+
+  <main id="bs" class="bs" data-phase="locked">
+
+    <!-- status bar (phone) / menu bar (desktop) -->
+    <header class="bs-bar">
+      <span class="bs-owner"><span class="drawing app-icon" data-asset="app-icon" data-asset-fallback="hide" aria-hidden="true"></span><span id="bs-owner">Someone's brain</span></span>
+      <span class="mono" id="bs-status"></span>
+      <span class="mono" id="bs-clock" aria-hidden="true"></span>
+    </header>
+
+    <!-- lock screen clock (phone only) -->
+    <div class="bs-lock" aria-hidden="true">
+      <p class="bs-time" id="bs-time"></p>
+      <p class="bs-date" id="bs-date"></p>
+    </div>
+
+    <p class="bs-notice" id="bs-notice" hidden></p>
+
+    <h1 class="visually-hidden">Thoughts that came with a gift</h1>
+
+    <!-- the opening system notification -->
+    <section class="bs-prompt" id="bs-prompt" aria-labelledby="bs-prompt-text">
+      <p class="bs-prompt-app mono">System</p>
+      <p class="bs-prompt-text" id="bs-prompt-text"></p>
+      <div class="bs-prompt-actions">
+        <button type="button" class="btn" id="bs-later">Maybe later</button>
+        <button type="button" class="btn primary" id="bs-open">Open</button>
+      </div>
+    </section>
+    <button type="button" class="bs-waiting" id="bs-waiting" hidden></button>
+
+    <!-- notification list (phone: lock screen stack · desktop: notification centre) -->
+    <section class="bs-center" id="bs-center" aria-labelledby="bs-center-title" hidden>
+      <h2 class="bs-center-title label" id="bs-center-title">Notifications</h2>
+      <ol class="bs-list" id="bs-list"></ol>
+      <button type="button" class="bs-more" id="bs-more" aria-expanded="false" aria-controls="bs-list"></button>
+      <p class="bs-pending mono" id="bs-pending"></p>
+    </section>
+
+    <!-- delivered thoughts as movable notifications (phone) or miniature windows (desktop) -->
+    <section class="bs-space-wrap" id="bs-space-wrap" aria-labelledby="bs-space-title" hidden>
+      <div class="bs-space-head">
+        <h2 class="label" id="bs-space-title">Delivered thoughts</h2>
+        <button type="button" class="btn quiet" id="bs-reset">Reset layout</button>
+      </div>
+      <p class="visually-hidden" id="bs-space-help">Each delivered thought has a move handle. Drag the handle, or focus it and use the arrow keys to move the thought; hold Shift to move further. Enter brings it to the front.</p>
+      <ol class="bs-space" id="bs-space"></ol>
+    </section>
+
+    <!-- the quiet ending -->
+    <section class="bs-final" id="bs-final" aria-labelledby="bs-final-text" hidden>
+      <p class="bs-final-dnd mono">Notifications cleared · Do Not Disturb on</p>
+      <p class="bs-final-text" id="bs-final-text" tabindex="-1"></p>
+      <p class="bs-final-from mono" id="bs-final-from"></p>
+      <div class="bs-final-links">
+        <button type="button" class="btn quiet" id="bs-again">Read again</button>
+        <button type="button" class="btn quiet" id="bs-history">All thoughts</button>
+      </div>
+    </section>
+
+    <!-- Previous / Next -->
+    <nav class="bs-nav" id="bs-nav" aria-label="Story">
+      <button type="button" class="btn" id="bs-prev">Previous</button>
+      <span class="bs-count mono" id="bs-count" aria-hidden="true"></span>
+      <button type="button" class="btn primary" id="bs-next">Next</button>
+      <button type="button" class="btn quiet" id="bs-back-end" hidden>Back to the end</button>
+    </nav>
+
+    <p class="visually-hidden" id="bs-announce" aria-live="polite"></p>
+  </main>
+
+  <!-- expanded thought (phone) -->
+  <dialog class="bs-sheet" id="bs-sheet" aria-labelledby="bs-sheet-title">
+    <div class="bs-sheet-bar">
+      <h2 class="mono" id="bs-sheet-title" tabindex="-1"></h2>
+      <button type="button" class="btn quiet" id="bs-sheet-close">Close</button>
+    </div>
+    <div class="bs-sheet-body" id="bs-sheet-body"></div>
+    <div class="bs-sheet-nav">
+      <button type="button" class="btn" id="bs-sheet-prev">Previous</button>
+      <span class="bs-count mono" id="bs-sheet-count" aria-hidden="true"></span>
+      <button type="button" class="btn primary" id="bs-sheet-next">Next</button>
+    </div>
+  </dialog>
+
+  <!-- file viewer -->
+  <dialog class="bs-viewer" id="bs-viewer" aria-labelledby="bs-viewer-title">
+    <div class="bs-sheet-bar">
+      <h2 class="mono" id="bs-viewer-title"></h2>
+      <button type="button" class="btn quiet" id="bs-viewer-close">Close</button>
+    </div>
+    <div class="bs-viewer-body" id="bs-viewer-body"></div>
+  </dialog>
+
+  <noscript><p class="bs-noscript">This story needs JavaScript to open, one thought at a time.</p></noscript>
+
+  <script src="js/assets.js"></script>
+  <script src="js/files.js"></script>
+  <script src="js/story.js"></script>
+  <script src="js/backstory.js"></script>
+</body>
+</html>

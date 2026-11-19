@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Curate · The Unnecessary Backstory</title>
+  <link rel="stylesheet" href="css/vendor/bootstrap-grid.min.css">
+  <link rel="stylesheet" href="css/vendor/bootstrap-utilities.min.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body class="app">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="os-bar">
+    <a class="os-brand" href="HomePage.html">The Unnecessary Backstory</a>
+    <nav aria-label="Steps">
+      <ol class="os-steps">
+        <li><a href="MyThoughts.html">My Thoughts</a></li>
+        <li><a href="Curate.html" aria-current="page">Curate</a></li>
+        <li><a href="WrapItUp.html">Wrap It Up</a></li>
+      </ol>
+    </nav>
+    <span class="os-save mono" id="autosave"></span>
+  </header>
+
+  <main id="main" class="page">
+    <div class="page-head">
+      <h1>Curate</h1>
+      <p>Choose which thoughts go in the gift and the order they will be read in. Anything you do not tick stays private. You can leave a picture or file out of a thought without deleting it.</p>
+    </div>
+
+    <div class="empty mb-4" id="no-thoughts" hidden>
+      <p>There are no thoughts to choose from yet.</p>
+      <a class="btn primary" href="MyThoughts.html">Write some thoughts</a>
+    </div>
+
+    <div class="row g-4 align-items-start" id="columns">
+      <div class="col-lg-6 curate-col">
+        <section aria-labelledby="all-title">
+          <h2 id="all-title">All thoughts <span id="all-count"></span></h2>
+          <ul class="thoughts" id="all"></ul>
+        </section>
+      </div>
+      <div class="col-lg-6 curate-col">
+        <section aria-labelledby="gift-title">
+          <h2 id="gift-title" tabindex="-1">In the gift, in reading order <span id="gift-count"></span></h2>
+          <p class="mono mb-3" style="color: var(--ink-soft)" id="order-hint">Use Up and Down to change the order. On a computer you can also drag.</p>
+          <div class="empty" id="gift-empty">
+            <p>Nothing chosen yet. Tick "In the gift" next to a thought on the left.</p>
+          </div>
+          <ol class="order" id="gift"></ol>
+        </section>
+      </div>
+    </div>
+
+    <div class="summary mt-4" id="summary">
+      <p id="summary-text"></p>
+      <div class="chip-row">
+        <a class="btn" href="MyThoughts.html">Back to My Thoughts</a>
+        <a class="btn primary" href="WrapItUp.html" id="continue">Next: wrap it up</a>
+      </div>
+    </div>
+    <p class="visually-hidden" id="announce" aria-live="polite"></p>
+  </main>
+
+  <dialog class="viewer" id="viewer" aria-labelledby="viewer-title">
+    <div class="win-bar"><h2 id="viewer-title">file</h2><button type="button" class="btn quiet" id="viewer-close">Close</button></div>
+    <div class="viewer-body" id="viewer-body"></div>
+  </dialog>
+
+  <script src="js/assets.js"></script>
+  <script src="js/files.js"></script>
+  <script src="js/story.js"></script>
+  <script src="js/draft.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/curate.js"></script>
+</body>
+</html>

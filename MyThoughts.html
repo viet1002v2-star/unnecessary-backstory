@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>My Thoughts · The Unnecessary Backstory</title>
+  <link rel="stylesheet" href="css/vendor/bootstrap-grid.min.css">
+  <link rel="stylesheet" href="css/vendor/bootstrap-utilities.min.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body class="app">
+  <a class="skip-link" href="#compose">Skip to the writing box</a>
+
+  <header class="os-bar">
+    <a class="os-brand" href="HomePage.html">The Unnecessary Backstory</a>
+    <nav aria-label="Steps">
+      <ol class="os-steps">
+        <li><a href="MyThoughts.html" aria-current="page">My Thoughts</a></li>
+        <li><a href="Curate.html">Curate</a></li>
+        <li><a href="WrapItUp.html">Wrap It Up</a></li>
+      </ol>
+    </nav>
+    <span class="os-save mono" id="autosave">not saved yet</span>
+  </header>
+
+  <main id="main" class="page">
+    <div class="page-head">
+      <h1>My Thoughts</h1>
+      <p>Write whatever crosses your mind while you prepare the gift. It does not have to be funny or make sense. Everything here is private until you choose otherwise in Curate.</p>
+    </div>
+
+    <div class="row g-4 align-items-start">
+      <div class="col-lg-5">
+        <section class="win composer" aria-labelledby="compose-title">
+          <div class="win-bar"><h2 id="compose-title">new_thought.txt</h2><span>private</span></div>
+          <div class="win-body">
+            <div class="field">
+              <label for="compose">What's on your mind?</label>
+              <textarea class="textarea hand" id="compose" rows="3" maxlength="600" aria-describedby="compose-hint" placeholder="Are roses too much?"></textarea>
+            </div>
+
+            <div class="pending" id="pending" hidden>
+              <span class="field-label">Attached</span>
+              <ul class="thoughts" id="pending-list"></ul>
+            </div>
+
+            <div class="composer-tools">
+              <div class="chip-row">
+                <input type="file" id="file-input" class="visually-hidden" multiple tabindex="-1" aria-hidden="true">
+                <button type="button" class="btn" id="attach">Attach a file</button>
+              </div>
+              <button type="button" class="btn primary" id="add">Add thought</button>
+            </div>
+            <p class="hint mono" id="compose-hint" style="margin:0">Enter adds the thought · Shift+Enter starts a new line · Pictures, PDF, .txt or .docx up to 10 MB</p>
+          </div>
+        </section>
+      </div>
+
+      <div class="col-lg-7">
+        <section aria-labelledby="list-title">
+          <div class="d-flex flex-wrap justify-content-between align-items-baseline gap-2 mb-3">
+            <h2 id="list-title" class="m-0" style="font: 600 1rem/1.3 var(--f-ui)" tabindex="-1">Your thoughts</h2>
+            <span class="mono" id="count" style="color: var(--ink-soft)"></span>
+          </div>
+          <div class="empty" id="empty" hidden>
+            <p>Nothing here yet. Thoughts you add stay on this computer until you choose to share them.</p>
+            <p>Want to try the flow first?</p>
+            <button type="button" class="btn" id="examples">Add example thoughts</button>
+          </div>
+          <ol class="thoughts" id="list" reversed></ol>
+          <div class="d-flex justify-content-end mt-4" id="next-wrap" hidden>
+            <a class="btn primary" href="Curate.html">Next: choose what to share</a>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <dialog class="viewer" id="viewer" aria-labelledby="viewer-title">
+    <div class="win-bar"><h2 id="viewer-title">file</h2><button type="button" class="btn quiet" id="viewer-close">Close</button></div>
+    <div class="viewer-body" id="viewer-body"></div>
+  </dialog>
+
+  <script src="js/assets.js"></script>
+  <script src="js/files.js"></script>
+  <script src="js/story.js"></script>
+  <script src="js/draft.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/mythoughts.js"></script>
+</body>
+</html>

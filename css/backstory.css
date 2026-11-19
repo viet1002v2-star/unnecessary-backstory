@@ -1,0 +1,295 @@
+/* =========================================================
+   The Backstory — recipient page
+   Phone (default): a lock screen. Thoughts arrive as notifications;
+                    opening one shows the whole thought on a light sheet.
+   Desktop (900px+): a notification centre on the left, delivered thoughts
+                    as movable miniature windows, Previous/Next below.
+   Delivered thoughts can be moved by their handle (pointer, touch or arrow keys);
+   this changes only where they sit, never the order of the story.
+   The ending is the quietest screen: no frames, no jokes.
+   ========================================================= */
+
+.bs-body { background: var(--night); color: var(--night-fg); }
+/* the blue focus ring is too dark on the night screen (2.3:1); use blush there (10:1) */
+.bs :focus-visible { outline-color: var(--night-care); }
+
+.bs {
+  max-width: 520px; min-height: 100dvh; margin: 0 auto;
+  display: flex; flex-direction: column; gap: var(--s3);
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));   /* room for the nav bar */
+}
+
+/* ---------- status bar ---------- */
+.bs-bar { display: flex; justify-content: space-between; align-items: center; gap: var(--s3); padding: var(--s3) 0 0; color: var(--night-dim); font-size: var(--t-label); }
+.bs-owner { display: inline-flex; align-items: center; gap: var(--s2); font: 500 var(--t-label)/1 var(--f-ui); }
+.app-icon { width: 18px; height: 18px; flex: none; }
+.app-icon img { filter: brightness(0) invert(1); }
+
+/* ---------- lock screen clock ---------- */
+.bs-lock { text-align: center; padding: var(--s5) 0 var(--s3); }
+.bs-time { margin: 0; font: 600 var(--t-clock)/1 var(--f-ui); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.bs-date { margin: var(--s2) 0 0; font: var(--t-label)/1.4 var(--f-mono); letter-spacing: .05em; text-transform: uppercase; color: var(--night-dim); }
+
+.bs-notice { margin: 0; padding-left: var(--s2); border-left: 2px solid var(--night-3); color: var(--night-dim); font: var(--t-label)/1.5 var(--f-mono); }
+.bs-notice a { color: inherit; text-underline-offset: 2px; display: inline-block; min-height: 24px; }
+
+/* ---------- opening system notification ---------- */
+.bs-prompt { border: 1px solid var(--night-3); border-radius: var(--radius); padding: var(--s4); display: grid; gap: var(--s2); animation: arrive .35s var(--ease) both; }
+.bs-prompt-app { margin: 0; color: var(--night-dim); }
+.bs-prompt-text { margin: 0; font: 500 var(--t-md)/1.45 var(--f-ui); }
+.bs-prompt-actions { display: flex; justify-content: flex-end; gap: var(--s2); margin-top: var(--s2); }
+.bs-prompt .btn { color: var(--night-fg); }
+.bs-prompt .btn.primary { background: var(--night-fg); color: var(--night); border-color: var(--night-fg); }
+.bs-waiting {
+  min-height: 44px; padding: var(--s3) var(--s4); text-align: left; cursor: pointer;
+  background: var(--night-2); border: 1px solid var(--night-3); border-radius: var(--radius);
+  color: var(--night-fg); font: 500 var(--t-sm)/1.3 var(--f-ui);
+}
+
+/* ---------- notifications ---------- */
+.bs-center { display: grid; gap: var(--s2); }
+.bs-center-title { margin: 0; color: var(--night-dim); }
+.bs-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s2); }
+.bs-day { margin: var(--s3) 0 0; color: var(--night-dim); font: var(--t-label)/1.4 var(--f-mono); letter-spacing: .05em; text-transform: uppercase; }
+
+.notif {
+  width: 100%; display: grid; gap: var(--s1); text-align: left; cursor: pointer;
+  padding: var(--s3) var(--s4); min-height: 44px;
+  background: var(--night-2); color: var(--night-fg);
+  border: 1px solid transparent; border-radius: var(--radius);
+}
+.notif-head { display: flex; justify-content: space-between; gap: var(--s3); color: var(--night-dim); font: var(--t-label)/1.4 var(--f-mono); }
+.notif-app { font: 600 var(--t-label)/1.4 var(--f-ui); color: var(--night-fg); }
+.notif-text { margin: 0; font: 500 var(--t-hand)/1.2 var(--f-hand); overflow-wrap: anywhere;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.notif-more { justify-self: start; color: var(--night-dim); font: var(--t-label)/1.4 var(--f-mono); }
+.notif-more::after { content: "  ·  Open"; color: var(--night-fg); white-space: pre; }
+.is-current > .notif { border-color: var(--night-fg); }
+.is-current > .notif .notif-app::before {
+  content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--night-care); margin-right: 6px; vertical-align: 2px;
+}
+.bs-list > li.is-arriving { animation: arrive .3s var(--ease) both; }
+@keyframes arrive { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+
+/* collapsed stack: only the current notification shows; the rest fold behind it */
+.bs-center[data-expanded="false"] .bs-list > li:not(.is-current) { display: none; }
+.bs-more {
+  min-height: 40px; padding: var(--s2) var(--s4); text-align: left; cursor: pointer;
+  background: transparent; color: var(--night-dim); border: 1px dashed var(--night-3); border-radius: var(--radius);
+  font: var(--t-label)/1.4 var(--f-mono);
+}
+.bs-pending { margin: 0; color: var(--night-dim); }
+
+/* ---------- movable workspace: delivered thoughts (phone: notifications with a grip) ---------- */
+.bs-space-wrap { flex: 1; display: flex; flex-direction: column; gap: var(--s2); min-height: 0; }
+.bs-space-wrap[hidden] { display: none; }
+.bs-space-head { display: flex; justify-content: space-between; align-items: center; gap: var(--s3); }
+.bs-space-head h2 { margin: 0; color: var(--night-dim); }
+.bs-space-head .btn { color: var(--night-dim); min-height: 44px; }
+.bs-space { list-style: none; margin: 0; padding: 0; position: relative; flex: 1; min-height: max(380px, 52dvh); isolation: isolate; }   /* own stacking context: cards never cover the nav bar */
+
+.card { position: absolute; left: 0; top: 0; }
+.card.is-arriving { animation: arrive .3s var(--ease) both; }
+
+.card-notif {
+  width: calc(100% - 24px);
+  display: grid; grid-template-columns: minmax(0, 1fr) 44px;
+  background: var(--night-2); border: 1px solid var(--night-3); border-radius: var(--radius);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, .45);
+}
+.card-notif > .notif { grid-column: 1; grid-row: 1; background: transparent; border: 0; }
+.card-notif.is-current { border-color: var(--night-fg); }
+.card-notif.is-current .notif-app::before {
+  content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--night-care); margin-right: 6px; vertical-align: 2px;
+}
+
+/* the grip is the only part that drags, so scrolling, reading and tapping keep working everywhere else */
+.drag-handle { touch-action: none; user-select: none; -webkit-user-select: none; cursor: grab; border: 0; margin: 0; font: inherit; }
+.card-notif > .drag-handle {
+  grid-column: 2; grid-row: 1; min-height: 44px; padding: 14px 0;
+  border-left: 1px dashed var(--night-3); border-radius: 0 var(--radius) var(--radius) 0;
+  background-color: transparent;
+  background-image: radial-gradient(circle, var(--night-dim) 1.6px, transparent 2px), radial-gradient(circle, var(--night-dim) 1.6px, transparent 2px);
+  background-size: 8px 8px, 8px 8px;
+  background-position: calc(50% - 4px) 0, calc(50% + 4px) 0;
+  background-repeat: repeat-y; background-origin: content-box; background-clip: content-box;
+}
+.card.is-dragging { box-shadow: 0 18px 40px rgba(0, 0, 0, .55); }
+.card.is-dragging .drag-handle { cursor: grabbing; }
+
+/* ---------- the quiet ending ---------- */
+.bs-final {
+  flex: 1; display: grid; align-content: center; justify-items: center; gap: var(--s3);
+  text-align: center; padding: var(--s6) var(--s2); animation: settle .9s var(--ease) both;
+}
+.bs-final-dnd { margin: 0 0 var(--s5); color: var(--night-dim); }
+.bs-final-text { margin: 0; font: 500 var(--t-final)/1.2 var(--f-hand); color: var(--night-fg); max-width: 20ch; overflow-wrap: anywhere; }
+.bs-final-text:focus { outline: none; }
+.bs-final-from { margin: 0; color: var(--night-dim); }
+.bs-final-links { display: flex; gap: var(--s2); margin-top: var(--s6); }
+.bs-final-links .btn { color: var(--night-dim); }
+@keyframes settle { from { opacity: 0; } to { opacity: 1; } }
+
+/* ---------- Previous / Next ---------- */
+.bs-nav {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: var(--s3);
+  padding: var(--s3) max(16px, env(safe-area-inset-right, 0px)) calc(var(--s3) + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+  background: var(--night); border-top: 1px solid var(--night-3);
+}
+.bs-nav .btn { color: var(--night-fg); }
+.bs-nav .btn.primary { background: var(--night-fg); color: var(--night); border-color: var(--night-fg); }
+.bs-count { color: var(--night-dim); text-align: center; min-width: 4ch; font-variant-numeric: tabular-nums; }
+.bs-nav #bs-back-end { grid-column: 1 / -1; justify-self: center; }
+.bs[data-phase="final"] .bs-nav { grid-template-columns: auto 1fr; }
+.bs[data-phase="final"] .bs-nav #bs-next,
+.bs[data-phase="final"] .bs-nav .bs-count { display: none; }
+.bs[data-phase="review"] .bs-nav #bs-prev,
+.bs[data-phase="review"] .bs-nav #bs-next,
+.bs[data-phase="review"] .bs-nav .bs-count { display: none; }
+
+/* ---------- expanded thought sheet (phone) ---------- */
+.bs-sheet, .bs-viewer {
+  width: 100%; max-width: 520px; max-height: 92dvh; margin: auto auto 0;
+  padding: 0; border: 0; border-radius: 12px 12px 0 0;
+  background: var(--paper); color: var(--ink);
+}
+.bs-sheet[open] { display: flex; flex-direction: column; animation: sheet-up .3s var(--ease) both; }
+.bs-sheet::backdrop, .bs-viewer::backdrop { background: rgba(10, 10, 14, .6); }
+@keyframes sheet-up { from { transform: translateY(24px); opacity: 0; } to { transform: none; opacity: 1; } }
+.bs-sheet-bar { display: flex; justify-content: space-between; align-items: center; gap: var(--s3); padding: var(--s1) var(--s2) var(--s1) var(--s4); border-bottom: 1px solid var(--rule); }
+.bs-sheet-bar h2 { margin: 0; font-weight: 400; color: var(--ink-soft); overflow-wrap: anywhere; }
+.bs-sheet-bar h2:focus { outline: none; }
+.bs-sheet-bar .btn { color: var(--ink); }
+.bs-sheet-body { padding: var(--s4); overflow: auto; flex: 1; }
+.bs-sheet-nav { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: var(--s3); padding: var(--s3) var(--s4) calc(var(--s3) + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--rule); }
+.bs-sheet-nav .btn { color: var(--ink); }
+.bs-sheet-nav .btn.primary { color: var(--paper); }
+.bs-sheet-nav .bs-count { color: var(--ink-soft); }
+
+/* ---------- thought content (shared by sheet and window) ---------- */
+.th { display: grid; gap: var(--s4); }
+.th-tag { margin: 0; color: var(--ink-soft); font: var(--t-label)/1.4 var(--f-mono); }
+.th-text { margin: 0; font: 500 var(--t-hand-lg)/1.25 var(--f-hand); overflow-wrap: anywhere; white-space: pre-line; }
+.th-figure { margin: 0; display: grid; gap: var(--s2); }
+.th-figure .drawing { color: var(--ink-soft); aspect-ratio: 4 / 3; max-height: 320px; }
+.th-figure .drawing.sheet-layer { aspect-ratio: auto; max-height: none; }   /* the pen layer always matches the page it sits on */
+.th-figure img { max-height: 320px; width: auto; margin: 0 auto; }
+.th-figure details { font: var(--t-sm)/1.45 var(--f-ui); color: var(--ink-soft); }
+.th-figure summary { cursor: pointer; font: var(--t-label)/1.4 var(--f-mono); min-height: 32px; display: flex; align-items: center; }
+.th-file {
+  justify-self: start; min-height: 44px; padding: var(--s2) var(--s3);
+  display: inline-flex; align-items: center; gap: var(--s2);
+  background: transparent; border: 1px solid var(--rule); border-radius: 4px; cursor: pointer;
+  color: var(--ink); font: var(--t-label)/1.3 var(--f-mono); text-align: left;
+}
+.th-file b { font-weight: 500; text-transform: uppercase; letter-spacing: .05em; color: var(--care-ink); }
+.th-missing { margin: 0; padding: var(--s2) var(--s3); border: 1px dashed var(--rule); border-radius: 4px; color: var(--ink-soft); font: var(--t-sm)/1.45 var(--f-ui); }
+
+/* ---------- file viewer ---------- */
+.bs-viewer[open] { display: flex; flex-direction: column; }
+.bs-viewer-body { padding: var(--s4); overflow: auto; }
+.bs-viewer-body img { margin: 0 auto; max-height: 70dvh; width: auto; }
+.bs-viewer-body iframe { width: 100%; height: 70dvh; border: 0; }
+.bs-viewer-body pre { margin: 0; white-space: pre-wrap; font: var(--t-sm)/1.6 var(--f-mono); }
+.bs-viewer-body p { margin: 0 0 var(--s3); }
+
+.bs-noscript { padding: var(--s5); }
+
+/* =========================================================
+   Desktop
+   ========================================================= */
+@media (min-width: 900px) {
+  .bs-body { background: var(--desk); color: var(--ink); }
+  .bs :focus-visible { outline-color: var(--focus); }
+  .bs {
+    max-width: none; height: 100dvh; min-height: 0; padding: 0; gap: 0;
+    display: grid; grid-template-columns: 320px minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto;
+    grid-template-areas: "bar bar" "center stage" "nav nav";
+  }
+
+  .bs-bar { grid-area: bar; padding: var(--s2) var(--s5); background: var(--paper); color: var(--ink-soft); border-bottom: 1px solid var(--rule); }
+  .bs-owner { color: var(--ink); }
+  .app-icon img { filter: none; }
+  .bs-lock { display: none; }
+  .bs-notice { grid-area: nav; align-self: center; justify-self: start; margin-left: var(--s5); max-width: 32ch; color: var(--ink-soft); border-left-color: var(--rule); z-index: 25; position: relative; }
+
+  /* opening prompt, waiting chip, final message: centred on the stage */
+  .bs-prompt, .bs-waiting, .bs-final { grid-row: 2; grid-column: 1 / -1; align-self: center; justify-self: center; }
+  .bs-prompt { width: min(440px, 90%); background: var(--paper); color: var(--ink); border-color: var(--ink); }
+  .bs-prompt-app { color: var(--ink-soft); }
+  .bs-prompt .btn { color: var(--ink); }
+  .bs-prompt .btn.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .bs-waiting { background: var(--paper); color: var(--ink); border-color: var(--rule); }
+
+  /* notification centre */
+  .bs-center { grid-area: center; align-content: start; overflow: auto; padding: var(--s5) var(--s4); border-right: 1px solid var(--rule); }
+  .bs-center-title { color: var(--ink-soft); }
+  .bs-center[data-expanded="false"] .bs-list > li:not(.is-current) { display: block; }
+  .bs-more { display: none; }
+  .notif { background: var(--paper); color: var(--ink); padding: var(--s2) var(--s3); }
+  .notif-head { color: var(--ink-soft); }
+  .notif-app { color: var(--ink); }
+  .notif-text { font-size: 1.25rem; -webkit-line-clamp: 2; }
+  .notif-more { color: var(--ink-soft); }
+  .notif-more::after { content: ""; }
+  .is-current > .notif { border-color: var(--ink); }
+  .is-current > .notif .notif-app::before { background: var(--care-ink); }
+  .bs-day { color: var(--ink-soft); }
+  .bs-pending { color: var(--ink-soft); padding: var(--s2) var(--s3); border: 1px dashed var(--rule); border-radius: var(--radius); }
+
+  /* the workspace: miniature windows on the stage */
+  .bs-space-wrap { grid-area: stage; padding: var(--s3) var(--s4) var(--s4); }
+  .bs-space-head h2 { color: var(--ink-soft); }
+  .bs-space-head .btn { color: var(--ink); }
+  .bs-space { min-height: 0; overflow: hidden; }   /* windows stay inside the stage; the handle is always kept in view */
+
+  .card-win {
+    width: min(460px, 72%); max-height: min(78%, 560px);
+    display: flex; flex-direction: column;
+    background: var(--paper); color: var(--ink);
+    border: 1px solid var(--ink-soft); border-radius: var(--radius);
+    box-shadow: 0 6px 18px rgba(29, 28, 34, .10);
+  }
+  .card-win.is-front { border-color: var(--ink); box-shadow: 0 14px 34px rgba(29, 28, 34, .18); }
+  .card-win > .drag-handle {
+    display: flex; justify-content: space-between; gap: var(--s3); width: 100%; text-align: left; flex: none;
+    padding: var(--s2) var(--s4); min-height: 36px;
+    background: transparent; color: var(--ink-soft); border-bottom: 1px solid var(--rule);
+    font: var(--t-label)/1.4 var(--f-mono); border-radius: var(--radius) var(--radius) 0 0;
+  }
+  .card-win.is-current > .drag-handle span:first-child::before {
+    content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--care-ink); margin-right: 8px; vertical-align: 2px;
+  }
+  .card-body { padding: var(--s4) var(--s5) var(--s5); overflow: auto; min-height: 0; }
+  .card-body:focus { outline: none; }
+  .card-body:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
+  .card-body .th-text { font-size: 1.75rem; }
+  .card.is-dragging { box-shadow: 0 20px 44px rgba(29, 28, 34, .22); }
+
+  .bs-final { padding: 0; }
+  .bs-final-dnd, .bs-final-from, .bs-final-links .btn { color: var(--ink-soft); }
+  .bs-final-text { color: var(--ink); font-size: 2.5rem; }
+
+  .bs-nav {
+    grid-area: nav; position: static; justify-content: center;
+    grid-template-columns: auto auto auto; padding: var(--s3) var(--s5);
+    background: var(--paper); border-top: 1px solid var(--rule);
+  }
+  .bs-nav .btn { color: var(--ink); min-width: 120px; }
+  .bs-nav .btn.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .bs-count { color: var(--ink-soft); }
+  .bs[data-phase="final"] .bs-nav { grid-template-columns: auto; }
+  /* desktop history keeps Previous/Next for walking through the window */
+  .bs[data-phase="review"] .bs-nav { grid-template-columns: auto auto auto auto; }
+  .bs[data-phase="review"] .bs-nav #bs-prev,
+  .bs[data-phase="review"] .bs-nav #bs-next,
+  .bs[data-phase="review"] .bs-nav .bs-count { display: inline-flex; }
+  .bs-nav #bs-back-end { grid-column: auto; }
+}

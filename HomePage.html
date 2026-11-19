@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>The Unnecessary Backstory</title>
+  <link rel="stylesheet" href="css/vendor/bootstrap-grid.min.css">
+  <link rel="stylesheet" href="css/vendor/bootstrap-utilities.min.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body class="app">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="os-bar">
+    <a class="os-brand" href="HomePage.html" aria-current="page">The Unnecessary Backstory</a>
+    <nav aria-label="Steps">
+      <ol class="os-steps">
+        <li><a href="MyThoughts.html">My Thoughts</a></li>
+        <li><a href="Curate.html">Curate</a></li>
+        <li><a href="WrapItUp.html">Wrap It Up</a></li>
+      </ol>
+    </nav>
+    <span class="os-save mono" id="home-status"></span>
+  </header>
+
+  <main id="main" class="page">
+    <div class="row g-4 g-lg-5 align-items-center mb-5">
+      <div class="col-lg-7">
+        <section class="home-hero" aria-labelledby="home-title">
+          <h1 id="home-title">The Unnecessary Backstory</h1>
+          <p class="tagline">Every gift has a story. This one has too many drafts.</p>
+          <p>Choosing a small gift sets off a stream of half-formed thoughts: ideas you drop, doubts that make no sense, and things that have nothing to do with the gift at all. Write them down here, privately. Then pick a few, put them in order, and send them along with the gift.</p>
+          <p>The person who opens your gift scans a code and reads your thoughts one notification at a time.</p>
+          <div class="home-actions">
+            <a class="btn primary" href="MyThoughts.html" id="home-start">Start a backstory</a>
+            <a class="btn" href="Backstory.html">See an example</a>
+          </div>
+        </section>
+      </div>
+      <div class="col-lg-5">
+        <div class="lock-sample" role="img" aria-label="Example: a phone lock screen showing two notifications from Sam's brain.">
+          <div class="t" aria-hidden="true">23:47</div>
+          <div class="d" aria-hidden="true">Thursday · came with the flowers</div>
+          <div class="n cur" aria-hidden="true"><div class="h"><b>Sam's brain</b><span>Thu 23:47</span></div><div class="x">Bought the flowers.</div></div>
+          <div class="n" aria-hidden="true"><div class="h"><b>Sam's brain</b><span>Thu 19:30</span></div><div class="x">Decided not to buy anything. Cards are mature.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <section aria-labelledby="how-title" class="mb-5">
+      <h2 id="how-title" class="label mb-3" style="color: var(--ink-soft)">How it works</h2>
+      <ol class="steps row g-4">
+        <li class="col-md-4"><h3><a href="MyThoughts.html">Write privately</a></h3><p>Add thoughts as they come, with a picture or a file if you like. Nothing leaves this computer, and nobody sees anything until you choose.</p></li>
+        <li class="col-md-4"><h3><a href="Curate.html">Choose what goes in the gift</a></h3><p>Tick the thoughts worth sharing and put them in the order you want them read. Everything else stays private.</p></li>
+        <li class="col-md-4"><h3><a href="WrapItUp.html">Wrap it up</a></h3><p>Add a last line, preview what they will see, and get a link or QR code to put with the gift.</p></li>
+      </ol>
+    </section>
+
+    <section aria-labelledby="privacy-title" class="notice" style="max-width: 72ch">
+      <h2 id="privacy-title" class="visually-hidden">Privacy</h2>
+      <p>Your thoughts are saved only in this browser on this computer. There are no accounts.</p>
+      <p>A share link carries the words you chose. Pictures and files you add stay on this computer, and the site tells you before you share.</p>
+    </section>
+  </main>
+
+  <footer class="foot mono">
+    <p>Prototype for HCI/UX coursework · Fonts: IBM Plex and Caveat (SIL Open Font License) · All drawings are hand-drawn by the author.</p>
+  </footer>
+
+  <script src="js/draft.js"></script>
+  <script>
+    (function () {
+      var d = UBDraft.load();
+      var n = d.thoughts.length;
+      var el = document.getElementById('home-status');
+      if (n) {
+        el.textContent = n + (n === 1 ? ' thought' : ' thoughts') + ' saved';
+        var start = document.getElementById('home-start');
+        start.textContent = 'Continue your backstory';
+      } else {
+        el.textContent = 'nothing saved yet';
+      }
+    })();
+  </script>
+</body>
+</html>
