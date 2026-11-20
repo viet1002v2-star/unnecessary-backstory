@@ -1,19 +1,15 @@
-/* Wrap It Up — final message, preview, and an honest share link / QR code.
-   Rules: the link carries words only; if the gift has pictures or files the giver must confirm that first;
-   no QR code is shown unless the link points to a public address a phone can open. */
 (function () {
   'use strict';
 
   var $ = function (id) { return document.getElementById(id); };
   var draft = UBDraft.load();
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  var QR_LIMIT = 2900;   // bytes a version-40 QR code holds at low error correction
+  var QR_LIMIT = 2900;
 
   UBUI.bindAutosave($('autosave'));
 
   function say(text) { var a = $('announce'); a.textContent = ''; setTimeout(function () { a.textContent = text; }, 30); }
 
-  /* Where a share link should point. null = nowhere a phone can reach. */
   function publicBase() {
     if (/^https?:$/.test(location.protocol)) return location.href.replace(/[#?].*$/, '').replace(/[^/]*$/, '');
     var u = (window.UB_CONFIG && UB_CONFIG.SITE_URL || '').trim();
@@ -21,7 +17,6 @@
     return /\/$/.test(u) ? u : u + '/';
   }
 
-  /* ---------- fields ---------- */
   var fields = ['final', 'from', 'gift'];
   fields.forEach(function (f) { $(f).value = draft.wrap[f] || ''; });
   var saveTimer = null;
@@ -36,7 +31,6 @@
     });
   });
 
-  /* ---------- what's included ---------- */
   function story() {
     var s = UBDraft.buildStory(draft);
     if (!s.final) s.final = 'Anyway. I hope you like it.';
@@ -69,7 +63,6 @@
     $('share-status').textContent = s.thoughts.length + (s.thoughts.length === 1 ? ' thought' : ' thoughts');
   }
 
-  /* ---------- preview ---------- */
   $('preview').addEventListener('click', function (e) {
     if (!UBStory.savePreview(story())) {
       e.preventDefault();
@@ -77,7 +70,6 @@
     }
   });
 
-  /* ---------- share ---------- */
   function staleOutput() {
     if (!$('out').hidden) {
       $('out').hidden = true;

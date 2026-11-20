@@ -11,7 +11,7 @@ Rules for every drawing
 
 -----------------------------------------------------------------
 1. app-icon.png
-   Purpose : the icon of the fictional "Sam's brain" app, shown next to the app name
+   Purpose : the icon of the fictional "Demo brain" app, shown next to the app name
              in the status bar (phone) and menu bar (desktop).
    Idea    : a tiny brain, a scribble, a face; anything that still reads at 18px.
    Size    : 256 x 256 px, square, transparent PNG

@@ -1,9 +1,6 @@
-/* Small shared interface helpers for the authoring pages:
-   toasts (with optional Undo), the autosave stamp in the top bar, upload checks and the file viewer. */
 (function () {
   'use strict';
 
-  /* ---------- toasts ---------- */
   var region = null;
   function ensureRegion() {
     if (region) return region;
@@ -14,7 +11,7 @@
     document.body.appendChild(region);
     return region;
   }
-  /* kind: 'ok' | 'error'; action: { label, run } */
+
   function toast(message, kind, action) {
     var r = ensureRegion();
     var t = document.createElement('div');
@@ -33,12 +30,11 @@
       t.appendChild(b);
     }
     r.appendChild(t);
-    while (r.children.length > 3) r.removeChild(r.firstChild);   /* keep at most three on screen */
+    while (r.children.length > 3) r.removeChild(r.firstChild);
     timer = setTimeout(close, action ? 8000 : kind === 'error' ? 7000 : 3500);
     return close;
   }
 
-  /* ---------- autosave stamp ---------- */
   function bindAutosave(el) {
     if (!el || !window.UBDraft) return;
     UBDraft.onSave(function (when) {
@@ -46,7 +42,6 @@
     });
   }
 
-  /* ---------- uploads ---------- */
   var MAX_BYTES = 10 * 1024 * 1024;
   var ALLOWED = [
     { kind: 'image', mimes: ['image/png', 'image/jpeg', 'image/gif', 'image/webp'], ext: /\.(png|jpe?g|gif|webp)$/i },
@@ -56,7 +51,6 @@
   ];
   var ACCEPT = '.png,.jpg,.jpeg,.gif,.webp,.pdf,.txt,.docx';
 
-  /* Returns { ok, kind, message } */
   function checkFile(file) {
     var match = null;
     ALLOWED.forEach(function (a) { if (a.mimes.indexOf(file.type) >= 0 || a.ext.test(file.name)) match = match || a; });
@@ -71,7 +65,6 @@
     return n < 1024 ? n + ' B' : n < 1048576 ? Math.round(n / 1024) + ' KB' : (n / 1048576).toFixed(1) + ' MB';
   }
 
-  /* ---------- file viewer (needs <dialog id="viewer"> with #viewer-title, #viewer-body, #viewer-close) ---------- */
   var viewerUrl = null;
   function viewer() { return document.getElementById('viewer'); }
 
@@ -89,7 +82,6 @@
     });
   }
 
-  /* block: an image/file/drawing block */
   function preview(block) {
     initViewer();
     var v = viewer(), body = document.getElementById('viewer-body');
@@ -134,7 +126,6 @@
     }).catch(function () { body.textContent = ''; say('This browser could not open its file storage.'); });
   }
 
-  /* Short human description of a block, for lists and chips. */
   function blockLabel(b) {
     if (b.type === 'image') return 'Picture · ' + (b.name || '');
     if (b.type === 'drawing') return ((b.asset === 'demo-cat' || /^a photo\b/i.test(b.alt || '')) ? 'Photo · ' : 'Drawing · ') + (b.alt || b.asset);

@@ -1,32 +1,3 @@
-/* Story model shared by every page.
-
-   Content, narrative order and presentation are kept apart:
-   {
-     v: 1,
-     from: "Sam",                 // optional signature
-     gift: "flowers",             // optional, shown on the lock screen
-     thoughts: [                  // narrative order = array order (Curate only reorders this list)
-       { at: ISO time, tag?: "unrelated",
-         blocks: [                // the author's content, as written
-           { type: "text",    text },
-           { type: "drawing", asset, alt },          // bundled with the site (assets/drawings/<asset>.png)
-           { type: "image",   id, name, alt },       // the giver's own picture, kept in this browser (IndexedDB)
-           { type: "file",    id | inline, name, mime }
-         ],
-         layout?: { ... }         // presentation hints only; content stays readable without them
-       } ],
-     final: "Anyway. I hope you like them."
-   }
-
-   Share links carry words only. Pictures and files the giver added stay on their computer;
-   in a link they become { type: "missing", kind, label } so the recipient knows something stayed behind.
-   Bundled drawings (part of the site itself) do travel, because every copy of the site has them.
-
-   Where the Backstory page gets its story:
-     #s=<code>            a share link
-     ?source=preview      the giver's own preview from localStorage (pictures and files work)
-     nothing              the built-in demo story
-*/
 (function () {
   'use strict';
 
@@ -35,7 +6,7 @@
 
   var SAMPLE = {
     v: 1,
-    from: 'Sam',
+    from: '',
     gift: 'flowers',
     thoughts: [
       { at: '2026-11-09T21:43:00', blocks: [{ type: 'text', text: 'I think flowers would be nice.' }] },
@@ -100,7 +71,6 @@
     }
   }
 
-  /* Older drafts stored { text, attachment }; turn them into blocks. */
   function toBlocks(t) {
     if (Array.isArray(t.blocks)) return t.blocks;
     var blocks = [];
@@ -113,7 +83,6 @@
     return blocks;
   }
 
-  /* Keep only known fields with sane sizes. Everything shown on screen goes through textContent. */
   function sanitize(raw, keepFiles) {
     if (!raw || typeof raw !== 'object' || !Array.isArray(raw.thoughts)) return null;
     var out = { v: 1, thoughts: [], final: clip(raw.final || '', LIMITS.final) };
@@ -133,7 +102,6 @@
     return out.thoughts.length ? out : null;
   }
 
-  /* ---- share links: base64url of UTF-8 JSON ---- */
   function toBase64Url(str) {
     var bytes = new TextEncoder().encode(str), bin = '';
     for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
@@ -147,8 +115,6 @@
     return new TextDecoder().decode(bytes);
   }
 
-  /* Compact form: each thought is [at, tag, [blocks]] where a block is
-     ["t", text] | ["d", asset, alt] | ["m", "picture"|"file", label]. */
   function encode(story) {
     var clean = sanitize(story, false);
     var slim = { v: 1, f: clean.final, t: clean.thoughts.map(function (t) {
@@ -191,7 +157,6 @@
     catch (e) { return false; }
   }
 
-  /* Returns { story, source: 'link' | 'preview' | 'demo', problem? } */
   function load() {
     var m = (location.hash || '').match(/[#&]s=([A-Za-z0-9_-]+)/);
     if (m) {
@@ -202,13 +167,12 @@
       try {
         var saved = sanitize(JSON.parse(localStorage.getItem(PREVIEW_KEY) || 'null'), true);
         if (saved) return { story: saved, source: 'preview' };
-      } catch (e) { /* fall through */ }
+      } catch (e) {  }
       return { story: sanitize(SAMPLE, true), source: 'demo', problem: 'No preview was found in this browser, so the demo story is shown instead.' };
     }
     return { story: sanitize(SAMPLE, true), source: 'demo' };
   }
 
-  /* Helpers for display */
   function firstText(t) {
     for (var i = 0; i < t.blocks.length; i++) if (t.blocks[i].type === 'text') return t.blocks[i].text;
     var d = t.blocks[0];

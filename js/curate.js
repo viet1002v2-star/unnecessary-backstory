@@ -1,5 +1,3 @@
-/* Curate — choose what goes in the gift and in which order.
-   Only ids in draft.curation.shared ever reach the recipient. New thoughts are never added automatically. */
 (function () {
   'use strict';
 
@@ -20,7 +18,6 @@
   }
   function short(s) { return s.length > 60 ? s.slice(0, 57) + '…' : s; }
 
-  /* ---------- left: every thought, with a checkbox ---------- */
   function renderAll() {
     var list = $('all');
     list.textContent = '';
@@ -72,7 +69,6 @@
     var again = $('pick-' + id); if (again) again.focus();
   }
 
-  /* ---------- right: the gift, in order ---------- */
   function renderGift() {
     var list = $('gift');
     list.textContent = '';
@@ -171,12 +167,11 @@
     if (b) b.focus();
   }
 
-  /* ---------- optional drag and drop (buttons do the same job) ---------- */
   var dragId = null;
   function bindDrag(card) {
     card.addEventListener('dragstart', function (e) {
       dragId = card.dataset.id; card.classList.add('is-dragging');
-      try { e.dataTransfer.setData('text/plain', dragId); e.dataTransfer.effectAllowed = 'move'; } catch (x) { /* ignore */ }
+      try { e.dataTransfer.setData('text/plain', dragId); e.dataTransfer.effectAllowed = 'move'; } catch (x) {  }
     });
     card.addEventListener('dragend', function () {
       dragId = null; card.classList.remove('is-dragging');
@@ -198,7 +193,6 @@
     });
   }
 
-  /* ---------- summary ---------- */
   function renderSummary() {
     var story = UBDraft.buildStory(draft);
     var shared = draft.curation.shared.length;

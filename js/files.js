@@ -1,10 +1,3 @@
-/* Local attachment storage (IndexedDB).
-   Files live only in this browser on this computer. They never travel inside a share link.
-   API (all return Promises):
-     UBFiles.put(file)   -> { id, name, type, size }
-     UBFiles.get(id)     -> { id, name, type, size, blob } or null
-     UBFiles.remove(id)
-*/
 (function () {
   'use strict';
 

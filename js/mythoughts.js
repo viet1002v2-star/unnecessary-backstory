@@ -1,12 +1,10 @@
-/* My Thoughts — a private brain dump.
-   Add, edit and delete thoughts; attach pictures and files (stored in IndexedDB on this computer). */
 (function () {
   'use strict';
 
   var $ = function (id) { return document.getElementById(id); };
   var draft = UBDraft.load();
-  var pending = [];          // [{ file, kind, alt }] waiting to be added with the next thought
-  var editing = null;        // id of the thought being edited
+  var pending = [];
+  var editing = null;
 
   UBUI.bindAutosave($('autosave'));
   $('file-input').setAttribute('accept', UBUI.ACCEPT);
@@ -17,7 +15,6 @@
     return false;
   }
 
-  /* ---------- pending attachments ---------- */
   function renderPending() {
     var list = $('pending-list');
     list.textContent = '';
@@ -71,7 +68,6 @@
     renderPending();
   });
 
-  /* ---------- adding ---------- */
   function add() {
     var box = $('compose');
     var text = box.value.trim();
@@ -112,7 +108,6 @@
   });
   $('compose').addEventListener('input', function () { $('compose').removeAttribute('aria-invalid'); });
 
-  /* ---------- list ---------- */
   function when(iso) { return UBStory.stamp(iso) || ''; }
 
   function chip(b, onClick, extraLabel) {
@@ -236,7 +231,7 @@
       var removed = t.blocks.filter(function (b) { return b.type !== 'text' && keep.indexOf(b) < 0; });
       t.blocks = (text ? [{ type: 'text', text: text }] : []).concat(keep);
       t.updated = Date.now();
-      delete draft.curation.hiddenBlocks[t.id];   // block positions changed; reset per-thought removals
+      delete draft.curation.hiddenBlocks[t.id];
       if (persist('Thought updated.')) {
         removed.forEach(function (b) { if (b.id) UBFiles.remove(b.id).catch(function () {}); });
         finish();
@@ -250,7 +245,6 @@
     return wrap;
   }
 
-  /* ---------- deleting with undo ---------- */
   function remove(id) {
     var index = -1;
     draft.thoughts.forEach(function (t, i) { if (t.id === id) index = i; });
@@ -285,7 +279,6 @@
     if (persist('Added ' + UBDraft.examples().length + ' example thoughts. Edit or delete them freely.')) { render(); $('list-title').focus(); }
   });
 
-  /* keep two open tabs in step */
   window.addEventListener('storage', function () { draft = UBDraft.load(); if (!editing) render(); });
 
   render();

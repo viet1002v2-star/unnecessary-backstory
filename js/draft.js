@@ -1,15 +1,3 @@
-/* The giver's draft, kept in this browser (localStorage). Files live separately in IndexedDB (files.js).
-
-   {
-     v: 1,
-     thoughts: [ { id, at, updated, blocks: [...] } ],   // newest last; everything is private by default
-     curation: {
-       shared: [id, ...],                // only these go in the gift, in this order
-       hiddenBlocks: { id: [blockIndex, ...] }   // attachments removed from the shared version only
-     },
-     wrap: { final, from, gift }
-   }
-*/
 (function () {
   'use strict';
 
@@ -34,7 +22,6 @@
     }
   }
 
-  /* Returns true when saved. On failure (private window, storage full) callers show an error. */
   function save(d) {
     try {
       localStorage.setItem(KEY, JSON.stringify(d));
@@ -57,18 +44,15 @@
 
   function isShared(d, id) { return d.curation.shared.indexOf(id) >= 0; }
 
-  /* Blocks of a thought that will actually go in the gift. */
   function sharedBlocks(d, t) {
     var hidden = d.curation.hiddenBlocks[t.id] || [];
     return t.blocks.filter(function (b, i) { return b.type === 'text' || b.type === 'sheet' || hidden.indexOf(i) < 0; });
   }
 
-  /* Files the giver added that cannot travel in a link. */
   function localMedia(blocks) {
     return blocks.filter(function (b) { return (b.type === 'image') || (b.type === 'file' && typeof b.inline !== 'string'); });
   }
 
-  /* The story the recipient will see, built only from explicitly shared thoughts. */
   function buildStory(d) {
     var thoughts = d.curation.shared.map(function (id) {
       var t = find(d, id);
@@ -81,7 +65,6 @@
     return s;
   }
 
-  /* Example thoughts so the flow can be tried without writing anything. Text only plus the bundled drawing. */
   function examples() {
     var base = Date.now() - 4 * 24 * 3600 * 1000;
     var mk = function (h, blocks) { return { id: newId() + h, at: new Date(base + h * 3600 * 1000).toISOString(), updated: Date.now(), blocks: blocks }; };

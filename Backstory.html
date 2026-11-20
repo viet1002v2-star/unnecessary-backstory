@@ -6,20 +6,18 @@
   <meta name="theme-color" content="#17161C">
   <title>The Backstory · The Unnecessary Backstory</title>
   <link rel="stylesheet" href="css/tokens.css">
-  <link rel="stylesheet" href="css/backstory.css?v=5">
+  <link rel="stylesheet" href="css/backstory.css?v=6">
 </head>
 <body class="bs-body">
 
   <main id="bs" class="bs" data-phase="locked">
 
-    <!-- status bar (phone) / menu bar (desktop) -->
     <header class="bs-bar">
       <span class="bs-owner"><span class="drawing app-icon" data-asset="app-icon" data-asset-fallback="hide" aria-hidden="true"></span><span id="bs-owner">Someone's brain</span></span>
       <span class="mono" id="bs-status"></span>
       <span class="mono" id="bs-clock" aria-hidden="true"></span>
     </header>
 
-    <!-- lock screen clock (phone only) -->
     <div class="bs-lock" aria-hidden="true">
       <p class="bs-time" id="bs-time"></p>
       <p class="bs-date" id="bs-date"></p>
@@ -29,7 +27,6 @@
 
     <h1 class="visually-hidden">Thoughts that came with a gift</h1>
 
-    <!-- the opening system notification -->
     <section class="bs-prompt" id="bs-prompt" aria-labelledby="bs-prompt-text">
       <p class="bs-prompt-app mono">System</p>
       <p class="bs-prompt-text" id="bs-prompt-text"></p>
@@ -40,7 +37,6 @@
     </section>
     <button type="button" class="bs-waiting" id="bs-waiting" hidden></button>
 
-    <!-- notification list (phone: lock screen stack · desktop: notification centre) -->
     <section class="bs-center" id="bs-center" aria-labelledby="bs-center-title" hidden>
       <h2 class="bs-center-title label" id="bs-center-title">Notifications</h2>
       <ol class="bs-list" id="bs-list"></ol>
@@ -48,7 +44,6 @@
       <p class="bs-pending mono" id="bs-pending"></p>
     </section>
 
-    <!-- delivered thoughts as movable notifications (phone) or miniature windows (desktop) -->
     <section class="bs-space-wrap" id="bs-space-wrap" aria-labelledby="bs-space-title" hidden>
       <div class="bs-space-head">
         <h2 class="label" id="bs-space-title">Delivered thoughts</h2>
@@ -58,7 +53,6 @@
       <ol class="bs-space" id="bs-space"></ol>
     </section>
 
-    <!-- the quiet ending -->
     <section class="bs-final" id="bs-final" aria-labelledby="bs-final-text" hidden>
       <p class="bs-final-dnd mono">Notifications cleared · Do Not Disturb on</p>
       <p class="bs-final-text" id="bs-final-text" tabindex="-1"></p>
@@ -69,7 +63,6 @@
       </div>
     </section>
 
-    <!-- Previous / Next -->
     <nav class="bs-nav" id="bs-nav" aria-label="Story">
       <button type="button" class="btn" id="bs-prev">Previous</button>
       <span class="bs-count mono" id="bs-count" aria-hidden="true"></span>
@@ -80,7 +73,6 @@
     <p class="visually-hidden" id="bs-announce" aria-live="polite"></p>
   </main>
 
-  <!-- expanded thought (phone) -->
   <dialog class="bs-sheet" id="bs-sheet" aria-labelledby="bs-sheet-title">
     <div class="bs-sheet-bar">
       <h2 class="mono" id="bs-sheet-title" tabindex="-1"></h2>
@@ -94,7 +86,6 @@
     </div>
   </dialog>
 
-  <!-- file viewer -->
   <dialog class="bs-viewer" id="bs-viewer" aria-labelledby="bs-viewer-title">
     <div class="bs-sheet-bar">
       <h2 class="mono" id="bs-viewer-title"></h2>
@@ -108,6 +99,6 @@
   <script src="js/assets.js"></script>
   <script src="js/files.js"></script>
   <script src="js/story.js"></script>
-  <script src="js/backstory.js?v=5"></script>
+  <script src="js/backstory.js?v=6"></script>
 </body>
 </html>

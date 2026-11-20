@@ -1,9 +1,3 @@
-/* Drawing slots.
-   <div class="drawing" data-asset="name" data-asset-alt="description"> loads assets/drawings/<name>.png (or <name>.jpg for photos).
-   If the file is missing:
-     data-asset-fallback="hide"  → the slot disappears (used for small icons)
-     otherwise                   → a labelled placeholder shows the file name and description,
-                                   so the designer only has to drop finished drawings into that folder. */
 (function () {
   'use strict';
 
@@ -22,7 +16,7 @@
       el.classList.add('has-drawing');
     };
     img.onerror = function () {
-      if (!img.dataset.triedJpg) { img.dataset.triedJpg = '1'; img.src = 'assets/drawings/' + name + '.jpg'; return; }   /* photos are bundled as JPG */
+      if (!img.dataset.triedJpg) { img.dataset.triedJpg = '1'; img.src = 'assets/drawings/' + name + '.jpg'; return; }
       if (el.getAttribute('data-asset-fallback') === 'hide') { el.hidden = true; return; }
       el.textContent = '';
       var slot = document.createElement('div');
@@ -39,10 +33,6 @@
     (root || document).querySelectorAll('.drawing[data-asset]').forEach(fillSlot);
   }
 
-  /* A visual thought sheet: a fixed-size page (w × h units) with text placed at coordinates and an
-     optional hand-drawn layer on top (assets/drawings/<layer>.png, same proportions as the sheet).
-     The whole sheet scales evenly to the available width, so the author's layout is kept on any screen.
-     Text stays real text (readable, selectable, read by screen readers); the description covers the drawing. */
   function renderSheet(b) {
     var fig = document.createElement('figure');
     fig.className = 'th-figure';

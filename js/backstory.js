@@ -1,15 +1,3 @@
-/* The Backstory — recipient page logic.
-
-   State
-     phase      locked → reading → final → review
-     delivered  how many thoughts have arrived so far (never goes down while reading)
-     current    which delivered thought is being looked at
-   The author sets the order; the reader moves with Previous / Next (buttons or ← →).
-   Nothing else advances the story, so taps on text and scrolling are always safe.
-
-   Layout (separate from the story): delivered thoughts sit in a workspace and can be moved by
-   their handle (pointer, touch, or arrow keys on the focused handle). Positions and stacking
-   live in `layout` and are thrown away by Reset layout or Read again. */
 (function () {
   'use strict';
 
@@ -34,13 +22,11 @@
   var from = story.from || '';
 
   var state = { phase: 'locked', delivered: 0, current: 0, later: false, expanded: false, arriving: -1 };
-  /* Spatial layout only: where each delivered thought sits and which is on top.
-     It never changes the story, the reading order or what is shared. */
+
   var layout = { pos: {}, z: {}, top: 10, front: -1 };
   var viewerUrl = null;
 
-  /* ---------- static text ---------- */
-  var owner = from ? from + "'s brain" : "Someone's brain";
+  var owner = loaded.source === 'demo' ? 'Demo brain' : from ? from + "'s brain" : "Someone's brain";
   $('bs-owner').textContent = owner;
   document.title = owner + ' · The Unnecessary Backstory';
   $('bs-prompt-text').textContent = "You've received " + total + (total === 1 ? ' thought' : ' thoughts') +
@@ -74,7 +60,6 @@
   tick();
   setInterval(tick, 30000);
 
-  /* ---------- thought content ---------- */
   function fileKind(b) {
     var m = (b.mime || '').toLowerCase(), n = (b.name || '').toLowerCase();
     if (b.inline !== undefined || m.indexOf('text/') === 0 || /\.txt$/.test(n)) return 'note';
@@ -163,7 +148,6 @@
     container.appendChild(wrap);
   }
 
-  /* ---------- notifications ---------- */
   function notification(i) {
     var t = story.thoughts[i];
     var li = document.createElement('li');
@@ -236,7 +220,6 @@
     $('bs-center-title').textContent = state.phase === 'review' ? 'Notification history' : 'Notifications';
   }
 
-  /* ---------- the movable workspace ---------- */
   function rnd(i, k) { var x = Math.sin((i + 1) * 12.9898 + k * 78.233) * 43758.5453; return x - Math.floor(x); }
 
   function card(i) {
@@ -266,7 +249,7 @@
       li.appendChild(body);
     } else {
       li.appendChild(handle);
-      li.appendChild(notification(i).firstChild);   /* the notification button: tap to open the sheet */
+      li.appendChild(notification(i).firstChild);
     }
 
     li.addEventListener('pointerdown', function () { toFront(li); }, true);
@@ -275,8 +258,6 @@
     return li;
   }
 
-  /* A new thought lands on top of the ones before it, shifted just enough that their title bars
-     (desktop) or headers (phone) still show, so every earlier thought stays reachable. */
   function defaultPos(i, w, h, W, H) {
     var step = i % 6, round = Math.floor(i / 6);
     if (desktop.matches) {
@@ -286,7 +267,7 @@
   }
 
   function clamp(p, w, H, W) {
-    var keep = 44;   /* the handle always stays reachable */
+    var keep = 44;
     return {
       x: Math.round(Math.max(0, Math.min(p.x, Math.max(0, W - w)))),
       y: Math.round(Math.max(0, Math.min(p.y, Math.max(0, H - keep))))
@@ -323,7 +304,7 @@
     els.space.textContent = '';
     for (var i = 0; i < state.delivered; i++) els.space.appendChild(card(i));
     els.space.querySelectorAll('.card').forEach(place);
-    /* the thought being read (a new arrival, or one reached with Previous/Next) comes to the front */
+
     var cur = els.space.querySelector('.card[data-index="' + state.current + '"]');
     if (cur) toFront(cur);
   }
@@ -336,7 +317,6 @@
     li.style.top = layout.pos[i].y + 'px';
   }
 
-  /* Drag by the handle only. touch-action: none on the handle keeps scrolling everywhere else intact. */
   function bindDrag(li, handle) {
     var start = null;
     handle.addEventListener('pointerdown', function (e) {
@@ -345,7 +325,7 @@
       toFront(li);
       var i = Number(li.dataset.index), p = layout.pos[i] || { x: 0, y: 0 };
       start = { px: e.clientX, py: e.clientY, x: p.x, y: p.y, moved: false };
-      try { handle.setPointerCapture(e.pointerId); } catch (x) { /* ignore */ }
+      try { handle.setPointerCapture(e.pointerId); } catch (x) {  }
       li.classList.add('is-dragging');
     });
     handle.addEventListener('pointermove', function (e) {
@@ -362,7 +342,7 @@
       start = null;
       li.classList.remove('is-dragging');
     };
-    /* Safari on iPhone still scrolls or zooms unless the touch itself is cancelled */
+
     var stop = function (e) { if (e.cancelable) e.preventDefault(); };
     handle.addEventListener('touchstart', stop, { passive: false });
     handle.addEventListener('touchmove', stop, { passive: false });
@@ -445,7 +425,6 @@
     say('Thought ' + (state.current + 1) + ' of ' + total + '. ' + UBStory.firstText(t));
   }
 
-  /* ---------- moving through the story ---------- */
   function open() {
     state.phase = 'reading';
     state.delivered = Math.max(1, state.delivered);
@@ -539,7 +518,6 @@
     $('bs-open').focus();
   }
 
-  /* ---------- files ---------- */
   function openFile(b) {
     els.viewerTitle.textContent = b.name;
     els.viewerBody.textContent = '';
@@ -576,14 +554,12 @@
     if (viewerUrl) { URL.revokeObjectURL(viewerUrl); viewerUrl = null; }
   });
 
-  /* Older phone browsers without <dialog>: give the two dialogs open/close so they still work. */
   [els.sheet, els.viewer].forEach(function (d) {
     if (typeof d.close === 'function') return;
     Object.defineProperty(d, 'open', { get: function () { return d.hasAttribute('open'); } });
     d.close = function () { if (!d.hasAttribute('open')) return; d.removeAttribute('open'); d.dispatchEvent(new Event('close')); };
   });
 
-  /* ---------- wiring ---------- */
   $('bs-open').addEventListener('click', open);
   $('bs-later').addEventListener('click', function () { state.later = true; render(); els.waiting.focus(); });
   els.waiting.addEventListener('click', open);
@@ -605,11 +581,9 @@
   });
   $('bs-viewer-close').addEventListener('click', function () { els.viewer.close(); });
   [els.sheet, els.viewer].forEach(function (d) {
-    d.addEventListener('click', function (e) { if (e.target === d) d.close(); });   /* tap on the dimmed backdrop closes */
+    d.addEventListener('click', function (e) { if (e.target === d) d.close(); });
   });
 
-  /* ← and → move the story. ↑ ↓ Space and Enter are left to the browser (scrolling, pressing buttons).
-     In the phone history list nothing is intercepted. */
   document.addEventListener('keydown', function (e) {
     if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
     if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
