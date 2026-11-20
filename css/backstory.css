@@ -188,6 +188,8 @@
 .th-figure img { max-height: 320px; width: auto; margin: 0 auto; }
 .th-figure details { font: var(--t-sm)/1.45 var(--f-ui); color: var(--ink-soft); }
 .th-figure summary { cursor: pointer; font: var(--t-label)/1.4 var(--f-mono); min-height: 32px; display: flex; align-items: center; }
+.th-figure summary::before { content: "\25B8"; margin-right: .5em; }   /* flex hides the browser's own arrow, so draw one */
+.th-figure details[open] > summary::before { content: "\25BE"; }
 .th-file {
   justify-self: start; min-height: 44px; padding: var(--s2) var(--s3);
   display: inline-flex; align-items: center; gap: var(--s2);

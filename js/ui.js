@@ -137,7 +137,7 @@
   /* Short human description of a block, for lists and chips. */
   function blockLabel(b) {
     if (b.type === 'image') return 'Picture · ' + (b.name || '');
-    if (b.type === 'drawing') return (/^a photo\b/i.test(b.alt || '') ? 'Photo · ' : 'Drawing · ') + (b.alt || b.asset);
+    if (b.type === 'drawing') return ((b.asset === 'demo-cat' || /^a photo\b/i.test(b.alt || '')) ? 'Photo · ' : 'Drawing · ') + (b.alt || b.asset);
     if (b.type === 'sheet') return 'Handwritten page';
     if (b.type === 'file') {
       if (typeof b.inline === 'string') return 'Note · ' + b.name;

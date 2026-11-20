@@ -56,7 +56,7 @@
       ] },
       { at: '2026-11-12T13:40:00', tag: 'unrelated', blocks: [
         { type: 'text', text: 'Saw a cat staring at a closed gate for ten minutes. Same, honestly.' },
-        { type: 'drawing', asset: 'demo-cat', alt: 'A photo: a thin white cat with a striped tail, seen from behind, sitting very still and staring through a closed gate.' }
+        { type: 'drawing', asset: 'demo-cat', alt: 'Just a cat like me, don\'t know what to do.' }
       ] },
       { at: '2026-11-12T19:30:00', blocks: [{ type: 'text', text: 'Decided not to buy anything. A card is enough. Cards are mature.' }] },
       { at: '2026-11-12T23:47:00', blocks: [{ type: 'text', text: 'Bought the flowers.' }] },
@@ -218,7 +218,7 @@
     var seenText = false, out = [];
     t.blocks.forEach(function (b) {
       if (b.type === 'text' && !seenText) { seenText = true; return; }
-      var word = b.type === 'text' ? 'more' : b.type === 'drawing' ? (/^a photo\b/i.test(b.alt || '') ? 'photo' : 'drawing') : b.type === 'sheet' ? 'handwritten page' : b.type === 'image' ? 'picture'
+      var word = b.type === 'text' ? 'more' : b.type === 'drawing' ? ((b.asset === 'demo-cat' || /^a photo\b/i.test(b.alt || '')) ? 'photo' : 'drawing') : b.type === 'sheet' ? 'handwritten page' : b.type === 'image' ? 'picture'
         : b.type === 'missing' ? (b.kind === 'picture' ? 'picture' : 'file')
         : (b.inline !== undefined || /^text\//.test(b.mime || '') ? 'note' : 'file');
       if (out.indexOf(word) < 0) out.push(word);
