@@ -19,11 +19,11 @@
       { at: '2026-11-10T15:02:00', blocks: [
         { type: 'text', text: 'Made a list. It did not help.' },
         { type: 'sheet', w: 510, h: 291, layer: 'demo-sheet', items: [],
-          alt: 'A handwritten list in pencil: "gift ideas (final (4?))". 1) flowers?, with a note in yellow beside it. 2) a book? does she read? 3) nothing ????. 4) just ask her?, followed by a squiggly arrow pointing away. A small bee is doodled in the bottom corner.' }
+          alt: 'The list, thanks to all the friends.' }
       ] },
       { at: '2026-11-11T17:05:00', blocks: [
         { type: 'text', text: "Drew the flowers so I'd remember which ones. Forgot to write down which ones." },
-        { type: 'drawing', asset: 'demo-flowers', alt: 'A quick sketch of five pink flowers on long stems, gathered at the bottom like a small bunch.' }
+        { type: 'drawing', asset: 'demo-flowers', alt: 'I almost bought these.' }
       ] },
       { at: '2026-11-12T13:40:00', tag: 'unrelated', blocks: [
         { type: 'text', text: 'Saw a cat staring at a closed gate for ten minutes. Same, honestly.' },

@@ -74,7 +74,7 @@
       mk(9, [{ type: 'text', text: 'Should I just text her instead? No. Maybe.' }]),
       mk(16, [{ type: 'text', text: 'Asked three friends. Got four answers.' }]),
       mk(20, [{ type: 'text', text: 'Made a list. It did not help.' }, UBStory.SAMPLE.thoughts[3].blocks[1]]),
-      mk(30, [{ type: 'text', text: "Drew the flowers so I'd remember which ones. Forgot to write down which ones." }, { type: 'drawing', asset: 'demo-flowers', alt: 'A quick sketch of five pink flowers on long stems, gathered at the bottom like a small bunch.' }]),
+      mk(30, [{ type: 'text', text: "Drew the flowers so I'd remember which ones. Forgot to write down which ones." }, { type: 'drawing', asset: 'demo-flowers', alt: 'I almost bought these.' }]),
       mk(40, [{ type: 'text', text: 'Saw a cat staring at a closed gate for ten minutes. Same, honestly.' }, { type: 'drawing', asset: 'demo-cat', alt: 'Just a cat like me, don\'t know what to do.' }]),
       mk(52, [{ type: 'text', text: 'Is it weird that I remember what colour she likes? It is fine. People remember things.' }]),
       mk(70, [{ type: 'text', text: 'Bought the flowers.' }])
